@@ -1,4 +1,4 @@
-const { registerSchema, loginSchema } = require('../validations/userValidation');
+const { registerSchema, loginSchema } = require('../validations/userValidations');
 const productSchema = require('../validations/productValidation');
 
 const validateRequest = (schema) => (req, res, next) => {
