@@ -5,20 +5,14 @@ const {
   updateProduct,
   deleteProduct,
 } = require('../controllers/productController');
-const authMiddleware = require('../middleware/auth');
+const { validateProduct } = require('../middleware/validationMiddleware');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Create a product
-router.post('/products', authMiddleware, createProduct);
-
-// Retrieve products (with pagination & filtering)
+router.post('/products', authMiddleware, validateProduct, createProduct);
 router.get('/products', authMiddleware, getProducts);
-
-// Update a product
-router.put('/products/:id', authMiddleware, updateProduct);
-
-// Delete a product
+router.put('/products/:id', authMiddleware, validateProduct, updateProduct);
 router.delete('/products/:id', authMiddleware, deleteProduct);
 
 module.exports = router;
