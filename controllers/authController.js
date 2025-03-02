@@ -3,20 +3,24 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const register = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const user = new User({ username, password });
-    await user.save();
-    res.status(201).json({ message: 'User registered successfully' });
+    const user = await User.findOne({ email : email });
+    if (user) {
+     return res.status(304).json({ message: 'User already exist' });
+    }
+    const newuser = new User({ email, password });
+    await newuser.save();
+    return res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
 const login = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email : email });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new Error('Invalid credentials');
     }
