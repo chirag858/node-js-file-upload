@@ -13,7 +13,7 @@ const register = async (req, res) => {
     await newuser.save();
     return res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 };
 
@@ -22,12 +22,12 @@ const login = async (req, res) => {
   try {
     const user = await User.findOne({ email : email });
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new Error('Invalid credentials');
+    return res.status(400).json({ error: "Invalid Credentials" });
     }
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    return res.status(200).json({ token });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 };
 

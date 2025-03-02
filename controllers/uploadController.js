@@ -24,9 +24,9 @@ const uploadCSV = async (req, res) => {
     // Delete the uploaded file after processing
     fs.unlinkSync(filePath);
 
-    res.status(201).json({ message: 'CSV file processed successfully', products });
+    return res.status(201).json({ message: 'CSV file processed successfully', products });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 };
 

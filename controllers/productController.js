@@ -6,9 +6,9 @@ const createProduct = async (req, res) => {
   try {
     const product = new Product({ product_name, category, price, stock, user: req.userId });
     await product.save();
-    res.status(201).json(product);
+    return res.status(201).json(product);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 };
 
@@ -29,9 +29,9 @@ const getProducts = async (req, res) => {
     const products = await Product.find(filter)
       .skip((page - 1) * limit) // Pagination
       .limit(parseInt(limit));
-    res.json(products);
+    return res.status(200).json(products);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 };
 
@@ -52,9 +52,9 @@ const updateProduct = async (req, res) => {
     product.stock = stock || product.stock;
 
     await product.save();
-    res.json(product);
+    return res.status(200).json(product);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 };
 
@@ -68,9 +68,9 @@ const deleteProduct = async (req, res) => {
       return res.status(404).json({ error: 'Product not found or unauthorized' });
     }
 
-    res.json({ message: 'Product deleted successfully' });
+    return res.json({ message: 'Product deleted successfully' });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 };
 
